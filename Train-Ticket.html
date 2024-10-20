@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="ticketBookingApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Ticket</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS file -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
+<body ng-controller="BookingController as ctrl">
+
+<div class="container">
+    <div class="header">
+        <h2>Book Ticket</h2>
+    </div>
+
+    <form name="bookingForm" novalidate ng-submit="ctrl.submitForm(bookingForm)">
+        <div class="form-group">
+            <label for="from">From</label>
+            <select id="from" ng-model="ctrl.from" required>
+                <option value="">Select City</option>
+                <option value="New Delhi">New Delhi</option>
+                <option value="Mumbai">Mumbai</option>
+                <option value="Kolkata">Kolkata</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="to">To</label>
+            <select id="to" ng-model="ctrl.to" required>
+                <option value="">Select City</option>
+                <option value="New Delhi">New Delhi</option>
+                <option value="Mumbai">Mumbai</option>
+                <option value="Kolkata">Kolkata</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="departure">Departure Time</label>
+            <input type="datetime-local" id="departure" ng-model="ctrl.departureTime" required>
+        </div>
+
+        <button type="submit">Search</button>
+    </form>
+
+    <div class="search-results" ng-if="ctrl.searchResults.length > 0">
+        <h3>Search Results</h3>
+        <div ng-repeat="result in ctrl.searchResults">
+            <p>From: {{ result.from }} (Departure: {{ result.departureTime }})</p>
+            <p>To: {{ result.to }} (Arrival: {{ result.arrivalTime }})</p>
+            <hr>
+        </div>
+    </div>
+</div>
+
+<script>
+    angular.module('ticketBookingApp', [])
+        .controller('BookingController', function() {
+            var vm = this;
+
+            vm.searchResults = [];
+            vm.from = '';
+            vm.to = '';
+            vm.departureTime = '';
+
+            vm.submitForm = function(form) {
+                if (form.$valid) {
+                    // Simulate a search result
+                    vm.searchResults.push({
+                        from: vm.from,
+                        to: vm.to,
+                        departureTime: vm.departureTime,
+                        arrivalTime: new Date(new Date(vm.departureTime).getTime() + 2 * 60 * 60 * 1000).toLocaleTimeString() // Simulated arrival time
+                    });
+                }
+            };
+        });
+</script>
+</body>
+</html>
